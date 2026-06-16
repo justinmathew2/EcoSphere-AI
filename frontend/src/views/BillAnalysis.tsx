@@ -39,7 +39,8 @@ export const BillAnalysis: React.FC<BillAnalysisProps> = ({ onBillAnalyzed }) =>
     formData.append('file', file);
 
     try {
-      const response = await fetch('/api/analyze-bill', {
+      const API = import.meta.env.VITE_API_URL || "http://localhost:8000";
+      const response = await fetch(`${API}/api/analyze-bill`, {
         method: 'POST',
         body: formData
       });
@@ -68,15 +69,15 @@ export const BillAnalysis: React.FC<BillAnalysisProps> = ({ onBillAnalyzed }) =>
 
       {!result ? (
         <form onSubmit={handleSubmit} className="glass-panel" style={{ padding: '40px' }}>
-          
-          <div 
+
+          <div
             className="file-upload-zone"
             onClick={() => document.getElementById('bill-file-input')?.click()}
           >
-            <input 
-              type="file" 
+            <input
+              type="file"
               id="bill-file-input"
-              style={{ display: 'none' }} 
+              style={{ display: 'none' }}
               accept="image/*,application/pdf"
               onChange={handleFileChange}
             />
@@ -101,9 +102,9 @@ export const BillAnalysis: React.FC<BillAnalysisProps> = ({ onBillAnalyzed }) =>
           )}
 
           <div style={{ textAlign: 'center', marginTop: '24px' }}>
-            <button 
-              type="submit" 
-              className="btn btn-primary" 
+            <button
+              type="submit"
+              className="btn btn-primary"
               disabled={!file || loading}
               style={{ width: '200px' }}
             >
@@ -120,7 +121,7 @@ export const BillAnalysis: React.FC<BillAnalysisProps> = ({ onBillAnalyzed }) =>
         </form>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-          
+
           {/* Success Banner */}
           <div className="glass-panel" style={{ padding: '24px', background: 'var(--color-glass-gradient)', border: '1px solid var(--color-primary)', display: 'flex', alignItems: 'center', gap: '16px' }}>
             <CheckCircle2 color="var(--color-primary)" size={32} />
@@ -181,8 +182,8 @@ export const BillAnalysis: React.FC<BillAnalysisProps> = ({ onBillAnalyzed }) =>
           </div>
 
           <div style={{ textAlign: 'center', marginTop: '16px' }}>
-            <button 
-              className="btn btn-secondary" 
+            <button
+              className="btn btn-secondary"
               onClick={() => { setFile(null); setResult(null); }}
             >
               Analyze Another Bill

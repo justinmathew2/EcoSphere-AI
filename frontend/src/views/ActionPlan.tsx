@@ -43,7 +43,8 @@ export const ActionPlan: React.FC<ActionPlanProps> = ({
     setError(null);
 
     try {
-      const response = await fetch('/api/action-plan', {
+      const API = import.meta.env.VITE_API_URL || "http://localhost:8000";
+      const response = await fetch(`${API}/api/action-plan`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(profileData)
@@ -115,7 +116,7 @@ export const ActionPlan: React.FC<ActionPlanProps> = ({
               Your Carbon Assessment profile will be evaluated by Gemini to draft 3 highly specific, reachable tasks that optimize your carbon rating.
             </p>
           </div>
-          <button 
+          <button
             className="btn btn-primary"
             onClick={fetchActionPlan}
             disabled={loading || !profileData}
@@ -137,14 +138,14 @@ export const ActionPlan: React.FC<ActionPlanProps> = ({
         </div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-          
+
           {/* Summary Panel */}
           <div className="glass-panel" style={{ padding: '24px', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', textAlign: 'center' }}>
             <div>
               <div style={{ color: 'var(--color-emerald)', fontSize: '1.75rem', fontWeight: 800 }}>{totalCo2Saved.toFixed(1)} kg</div>
               <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', fontWeight: 500, marginTop: '2px' }}>Carbon CO₂ Saved</div>
             </div>
-            
+
             <div>
               <div style={{ color: 'var(--color-sky)', fontSize: '1.75rem', fontWeight: 800 }}>${totalCashSaved.toFixed(2)}</div>
               <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', fontWeight: 500, marginTop: '2px' }}>Money Saved</div>
@@ -169,29 +170,29 @@ export const ActionPlan: React.FC<ActionPlanProps> = ({
 
             <div className="checklist-container">
               {actionPlan.recommendations.map((rec, index) => (
-                <div 
-                  key={index} 
+                <div
+                  key={index}
                   className={`checklist-item ${checkedTasks[index] ? 'checked' : ''}`}
                   onClick={() => toggleTask(index)}
                 >
                   <div className="checklist-checkbox">
                     {checkedTasks[index] && <div style={{ width: '12px', height: '12px', background: 'currentColor', borderRadius: '2px' }} />}
                   </div>
-                  
+
                   <div className="checklist-content">
-                    <span style={{ 
-                      fontSize: '0.7rem', 
-                      fontWeight: 700, 
-                      textTransform: 'uppercase', 
-                      color: 'var(--color-primary)', 
-                      letterSpacing: '0.05em', 
+                    <span style={{
+                      fontSize: '0.7rem',
+                      fontWeight: 700,
+                      textTransform: 'uppercase',
+                      color: 'var(--color-primary)',
+                      letterSpacing: '0.05em',
                       display: 'block',
                       marginBottom: '4px'
                     }}>
                       {rec.category}
                     </span>
                     <div className="checklist-title">{rec.description}</div>
-                    
+
                     <div className="checklist-metrics">
                       <span className="checklist-metric metric-co2">
                         <TrendingDown size={12} /> -{rec.estimated_co2_savings_kg} kg CO₂
@@ -217,7 +218,7 @@ export const ActionPlan: React.FC<ActionPlanProps> = ({
           </div>
 
           <div style={{ textAlign: 'center' }}>
-            <button 
+            <button
               className="btn btn-secondary"
               onClick={() => { setActionPlan(null); setCheckedTasks([]); }}
             >

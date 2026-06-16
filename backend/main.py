@@ -5,8 +5,8 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from typing import List, Optional
 
-from .calculator import CarbonProfileInput, calculate_footprint, CarbonCalculationResult
-from .ai_agent import AIAgent, ChatMessage, ActionPlan, BillAnalysisResult, ProductAnalysisResult
+from calculator import CarbonProfileInput, calculate_footprint, CarbonCalculationResult
+from ai_agent import AIAgent, ChatMessage, ActionPlan, BillAnalysisResult, ProductAnalysisResult
 
 app = FastAPI(
     title="EcoSphere AI API",
@@ -16,7 +16,10 @@ app = FastAPI(
 # Enable CORS for local development (frontend running on Vite dev port)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # In production, restrict to specific domains
+    allow_origins=[
+        "https://deployfesthack.web.app",
+        "https://deployfesthack.firebaseapp.com",
+    ], 
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

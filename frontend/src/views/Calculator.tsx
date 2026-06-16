@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { 
-  Car, 
-  Lightbulb, 
-  Utensils, 
-  ShoppingBag, 
-  ArrowLeft, 
-  ArrowRight, 
+import {
+  Car,
+  Lightbulb,
+  Utensils,
+  ShoppingBag,
+  ArrowLeft,
+  ArrowRight,
   Check,
   AlertCircle
 } from 'lucide-react';
@@ -45,30 +45,30 @@ export const Calculator: React.FC<CalculatorProps> = ({ onCalculateSuccess, save
     transport_train_km_per_week: savedProfile?.transport_train_km_per_week ?? 0,
     transport_bike_km_per_week: savedProfile?.transport_bike_km_per_week ?? 0,
     transport_flights_hours_per_year: savedProfile?.transport_flights_hours_per_year ?? 0,
-    
+
     energy_kwh_per_month: savedProfile?.energy_kwh_per_month ?? 0,
     energy_ac_hours_per_week: savedProfile?.energy_ac_hours_per_week ?? 0,
     energy_has_solar: savedProfile?.energy_has_solar ?? false,
-    
+
     food_habit: savedProfile?.food_habit ?? 'mixed',
-    
+
     shopping_electronics_per_month: savedProfile?.shopping_electronics_per_month ?? 0,
     shopping_clothing_items_per_month: savedProfile?.shopping_clothing_items_per_month ?? 0,
     shopping_plastic_bags_per_week: savedProfile?.shopping_plastic_bags_per_week ?? 0,
-    
+
     waste_recycling_level: savedProfile?.waste_recycling_level ?? 'partial'
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
-    
+
     let parsedValue: any = value;
     if (type === 'checkbox') {
       parsedValue = (e.target as HTMLInputElement).checked;
     } else if (type === 'number') {
       parsedValue = value === '' ? 0 : Math.max(0, parseFloat(value));
     }
-    
+
     setFormData(prev => ({
       ...prev,
       [name]: parsedValue
@@ -106,7 +106,8 @@ export const Calculator: React.FC<CalculatorProps> = ({ onCalculateSuccess, save
     setError(null);
 
     try {
-      const response = await fetch('/api/calculate', {
+      const API = import.meta.env.VITE_API_URL || "http://localhost:8000";
+      const response = await fetch(`${API}/api/calculate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
@@ -130,12 +131,12 @@ export const Calculator: React.FC<CalculatorProps> = ({ onCalculateSuccess, save
       <div className="mb-32 text-center">
         <h1 style={{ fontSize: '2.25rem', fontWeight: 800 }}>Carbon Footprint Assessment</h1>
         <p style={{ color: 'var(--text-secondary)' }}>Input your habits below to compute your monthly carbon footprint.</p>
-        
+
         {/* Step indicator */}
         <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginTop: '20px' }}>
           {[1, 2, 3, 4].map(idx => (
-            <div 
-              key={idx} 
+            <div
+              key={idx}
               style={{
                 width: '40px',
                 height: '6px',
@@ -156,7 +157,7 @@ export const Calculator: React.FC<CalculatorProps> = ({ onCalculateSuccess, save
       )}
 
       <form onSubmit={handleSubmit} className="glass-panel animate-fade-in" style={{ padding: '32px' }}>
-        
+
         {/* Step 1: Transportation */}
         {step === 1 && (
           <div className="animate-fade-in">
@@ -164,27 +165,27 @@ export const Calculator: React.FC<CalculatorProps> = ({ onCalculateSuccess, save
               <Car color="var(--color-primary)" size={24} />
               <h2 style={{ fontSize: '1.5rem' }}>Transportation Habits</h2>
             </div>
-            
+
             <div className="form-grid">
               <div className="form-group">
                 <label className="form-label">Gasoline Car Travel (km/week)</label>
-                <input 
-                  type="number" 
-                  name="transport_car_km_per_week" 
-                  className="form-input" 
-                  value={formData.transport_car_km_per_week} 
-                  onChange={handleInputChange} 
+                <input
+                  type="number"
+                  name="transport_car_km_per_week"
+                  className="form-input"
+                  value={formData.transport_car_km_per_week}
+                  onChange={handleInputChange}
                 />
               </div>
 
               <div className="form-group">
                 <label className="form-label">Electric Vehicle (EV) (km/week)</label>
-                <input 
-                  type="number" 
-                  name="transport_ev_km_per_week" 
-                  className="form-input" 
-                  value={formData.transport_ev_km_per_week} 
-                  onChange={handleInputChange} 
+                <input
+                  type="number"
+                  name="transport_ev_km_per_week"
+                  className="form-input"
+                  value={formData.transport_ev_km_per_week}
+                  onChange={handleInputChange}
                 />
               </div>
             </div>
@@ -192,23 +193,23 @@ export const Calculator: React.FC<CalculatorProps> = ({ onCalculateSuccess, save
             <div className="form-grid" style={{ marginTop: '12px' }}>
               <div className="form-group">
                 <label className="form-label">Bus Travel (km/week)</label>
-                <input 
-                  type="number" 
-                  name="transport_bus_km_per_week" 
-                  className="form-input" 
-                  value={formData.transport_bus_km_per_week} 
-                  onChange={handleInputChange} 
+                <input
+                  type="number"
+                  name="transport_bus_km_per_week"
+                  className="form-input"
+                  value={formData.transport_bus_km_per_week}
+                  onChange={handleInputChange}
                 />
               </div>
 
               <div className="form-group">
                 <label className="form-label">Train Travel (km/week)</label>
-                <input 
-                  type="number" 
-                  name="transport_train_km_per_week" 
-                  className="form-input" 
-                  value={formData.transport_train_km_per_week} 
-                  onChange={handleInputChange} 
+                <input
+                  type="number"
+                  name="transport_train_km_per_week"
+                  className="form-input"
+                  value={formData.transport_train_km_per_week}
+                  onChange={handleInputChange}
                 />
               </div>
             </div>
@@ -216,23 +217,23 @@ export const Calculator: React.FC<CalculatorProps> = ({ onCalculateSuccess, save
             <div className="form-grid" style={{ marginTop: '12px' }}>
               <div className="form-group">
                 <label className="form-label">Bicycle/Walking (km/week)</label>
-                <input 
-                  type="number" 
-                  name="transport_bike_km_per_week" 
-                  className="form-input" 
-                  value={formData.transport_bike_km_per_week} 
-                  onChange={handleInputChange} 
+                <input
+                  type="number"
+                  name="transport_bike_km_per_week"
+                  className="form-input"
+                  value={formData.transport_bike_km_per_week}
+                  onChange={handleInputChange}
                 />
               </div>
 
               <div className="form-group">
                 <label className="form-label">Air Travel (Flight Hours/year)</label>
-                <input 
-                  type="number" 
-                  name="transport_flights_hours_per_year" 
-                  className="form-input" 
-                  value={formData.transport_flights_hours_per_year} 
-                  onChange={handleInputChange} 
+                <input
+                  type="number"
+                  name="transport_flights_hours_per_year"
+                  className="form-input"
+                  value={formData.transport_flights_hours_per_year}
+                  onChange={handleInputChange}
                 />
               </div>
             </div>
@@ -246,38 +247,38 @@ export const Calculator: React.FC<CalculatorProps> = ({ onCalculateSuccess, save
               <Lightbulb color="var(--color-primary)" size={24} />
               <h2 style={{ fontSize: '1.5rem' }}>Home Energy Consumption</h2>
             </div>
-            
+
             <div className="form-group">
               <label className="form-label">Monthly Electricity Bill Consumption (kWh)</label>
-              <input 
-                type="number" 
-                name="energy_kwh_per_month" 
-                className="form-input" 
+              <input
+                type="number"
+                name="energy_kwh_per_month"
+                className="form-input"
                 placeholder="e.g. 300"
-                value={formData.energy_kwh_per_month} 
-                onChange={handleInputChange} 
+                value={formData.energy_kwh_per_month}
+                onChange={handleInputChange}
               />
               <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Check your utility bill for average consumption.</span>
             </div>
 
             <div className="form-group">
               <label className="form-label">Air Conditioning (AC) usage (Hours/week)</label>
-              <input 
-                type="number" 
-                name="energy_ac_hours_per_week" 
-                className="form-input" 
-                value={formData.energy_ac_hours_per_week} 
-                onChange={handleInputChange} 
+              <input
+                type="number"
+                name="energy_ac_hours_per_week"
+                className="form-input"
+                value={formData.energy_ac_hours_per_week}
+                onChange={handleInputChange}
               />
             </div>
 
             <div className="form-group" style={{ flexDirection: 'row', alignItems: 'center', gap: '12px', marginTop: '16px', padding: '12px', background: 'rgba(255,255,255,0.02)', borderRadius: 'var(--border-radius-md)', border: '1px solid var(--border-color)' }}>
-              <input 
-                type="checkbox" 
+              <input
+                type="checkbox"
                 id="energy_has_solar"
-                name="energy_has_solar" 
-                checked={formData.energy_has_solar} 
-                onChange={handleInputChange} 
+                name="energy_has_solar"
+                checked={formData.energy_has_solar}
+                onChange={handleInputChange}
                 style={{ width: '20px', height: '20px', cursor: 'pointer' }}
               />
               <div>
@@ -295,7 +296,7 @@ export const Calculator: React.FC<CalculatorProps> = ({ onCalculateSuccess, save
               <Utensils color="var(--color-primary)" size={24} />
               <h2 style={{ fontSize: '1.5rem' }}>Dietary Preferences</h2>
             </div>
-            
+
             <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '20px' }}>Select the dietary habit that best represents your daily food consumption:</p>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -305,7 +306,7 @@ export const Calculator: React.FC<CalculatorProps> = ({ onCalculateSuccess, save
                 { id: 'mixed', label: '🥗 Mixed Diet', desc: 'Average consumption of vegetables, grains, and moderate meat.' },
                 { id: 'meat-heavy', label: '🥩 Meat-Heavy', desc: 'Frequent consumption of beef, pork, poultry, and dairy.' }
               ].map(diet => (
-                <div 
+                <div
                   key={diet.id}
                   onClick={() => handleSelectDiet(diet.id)}
                   style={{
@@ -337,35 +338,35 @@ export const Calculator: React.FC<CalculatorProps> = ({ onCalculateSuccess, save
             <div className="form-grid">
               <div className="form-group">
                 <label className="form-label">Electronics Purchased (Items/month)</label>
-                <input 
-                  type="number" 
-                  name="shopping_electronics_per_month" 
-                  className="form-input" 
-                  value={formData.shopping_electronics_per_month} 
-                  onChange={handleInputChange} 
+                <input
+                  type="number"
+                  name="shopping_electronics_per_month"
+                  className="form-input"
+                  value={formData.shopping_electronics_per_month}
+                  onChange={handleInputChange}
                 />
               </div>
 
               <div className="form-group">
                 <label className="form-label">Clothing Purchased (Items/month)</label>
-                <input 
-                  type="number" 
-                  name="shopping_clothing_items_per_month" 
-                  className="form-input" 
-                  value={formData.shopping_clothing_items_per_month} 
-                  onChange={handleInputChange} 
+                <input
+                  type="number"
+                  name="shopping_clothing_items_per_month"
+                  className="form-input"
+                  value={formData.shopping_clothing_items_per_month}
+                  onChange={handleInputChange}
                 />
               </div>
             </div>
 
             <div className="form-group">
               <label className="form-label">Single-use Plastic Bags Used (Bags/week)</label>
-              <input 
-                type="number" 
-                name="shopping_plastic_bags_per_week" 
-                className="form-input" 
-                value={formData.shopping_plastic_bags_per_week} 
-                onChange={handleInputChange} 
+              <input
+                type="number"
+                name="shopping_plastic_bags_per_week"
+                className="form-input"
+                value={formData.shopping_plastic_bags_per_week}
+                onChange={handleInputChange}
               />
             </div>
 

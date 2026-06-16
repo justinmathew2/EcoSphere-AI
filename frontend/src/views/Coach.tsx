@@ -44,7 +44,8 @@ export const Coach: React.FC<CoachProps> = ({ profileData }) => {
     setLoading(true);
 
     try {
-      const response = await fetch('/api/coach', {
+      const API = import.meta.env.VITE_API_URL || "http://localhost:8000";
+      const response = await fetch(`${API}/api/coach`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -61,10 +62,10 @@ export const Coach: React.FC<CoachProps> = ({ profileData }) => {
       setMessages(prev => [...prev, { role: 'model', content: data.response }]);
     } catch (err: any) {
       setMessages(prev => [
-        ...prev, 
-        { 
-          role: 'model', 
-          content: "❌ Sorry, I encountered an error. Please check if your backend is running and the Vertex AI credentials are valid." 
+        ...prev,
+        {
+          role: 'model',
+          content: "❌ Sorry, I encountered an error. Please check if your backend is running and the Vertex AI credentials are valid."
         }
       ]);
     } finally {
@@ -93,7 +94,7 @@ export const Coach: React.FC<CoachProps> = ({ profileData }) => {
 
   return (
     <div className="glass-panel chat-container animate-slide-up" style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-      
+
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '20px 24px', borderBottom: '1px solid var(--border-color)', background: 'rgba(255,255,255,0.01)' }}>
         <div style={{ width: '40px', height: '40px', background: 'var(--color-glass-gradient)', border: '1px solid rgba(16, 185, 129, 0.25)', borderRadius: 'var(--border-radius-full)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -110,7 +111,7 @@ export const Coach: React.FC<CoachProps> = ({ profileData }) => {
       {/* Messages */}
       <div className="chat-messages">
         {messages.map((msg, index) => (
-          <div 
+          <div
             key={index}
             className={`chat-bubble ${msg.role}`}
             style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}
@@ -142,7 +143,7 @@ export const Coach: React.FC<CoachProps> = ({ profileData }) => {
             "Suggest eco-friendly travel options",
             "Why is my Carbon Score low?"
           ].map((prompt, idx) => (
-            <button 
+            <button
               key={idx}
               onClick={() => handleQuickPrompt(prompt)}
               className="btn btn-secondary"
@@ -156,16 +157,16 @@ export const Coach: React.FC<CoachProps> = ({ profileData }) => {
 
       {/* Input Form */}
       <div className="chat-input-wrapper">
-        <input 
-          type="text" 
-          className="form-input" 
-          placeholder="Ask the Sustainability Coach a question..." 
+        <input
+          type="text"
+          className="form-input"
+          placeholder="Ask the Sustainability Coach a question..."
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleSend()}
           disabled={loading}
         />
-        <button 
+        <button
           className="btn btn-primary"
           onClick={() => handleSend()}
           disabled={loading || !input.trim()}

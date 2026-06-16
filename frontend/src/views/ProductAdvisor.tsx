@@ -47,7 +47,8 @@ export const ProductAdvisor: React.FC<ProductAdvisorProps> = ({ onProductAnalyze
     }
 
     try {
-      const response = await fetch('/api/analyze-product', {
+      const API = import.meta.env.VITE_API_URL || "http://localhost:8000";
+      const response = await fetch(`${API}/api/analyze-product`, {
         method: 'POST',
         body: formData
       });
@@ -82,11 +83,11 @@ export const ProductAdvisor: React.FC<ProductAdvisorProps> = ({ onProductAnalyze
 
       {!result ? (
         <form onSubmit={handleSubmit} className="glass-panel" style={{ padding: '32px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          
+
           <div className="form-group">
             <label className="form-label">Product Name / Description</label>
-            <textarea 
-              className="form-textarea" 
+            <textarea
+              className="form-textarea"
               rows={3}
               placeholder="e.g. Disposable plastic water bottles, cotton organic t-shirt, plastic toothbrush..."
               value={description}
@@ -96,15 +97,15 @@ export const ProductAdvisor: React.FC<ProductAdvisorProps> = ({ onProductAnalyze
 
           <div className="form-group">
             <label className="form-label">Upload Product Photo or Ingredient Label (Optional)</label>
-            <div 
+            <div
               className="file-upload-zone"
               onClick={() => document.getElementById('product-file-input')?.click()}
               style={{ padding: '24px' }}
             >
-              <input 
-                type="file" 
+              <input
+                type="file"
                 id="product-file-input"
-                style={{ display: 'none' }} 
+                style={{ display: 'none' }}
                 accept="image/*"
                 onChange={handleFileChange}
               />
@@ -130,9 +131,9 @@ export const ProductAdvisor: React.FC<ProductAdvisorProps> = ({ onProductAnalyze
           )}
 
           <div style={{ textAlign: 'center', marginTop: '12px' }}>
-            <button 
-              type="submit" 
-              className="btn btn-primary" 
+            <button
+              type="submit"
+              className="btn btn-primary"
               disabled={loading}
               style={{ width: '220px' }}
             >
@@ -149,7 +150,7 @@ export const ProductAdvisor: React.FC<ProductAdvisorProps> = ({ onProductAnalyze
         </form>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-          
+
           {/* Success Banner */}
           <div className="glass-panel" style={{ padding: '24px', background: 'var(--color-glass-gradient)', border: '1px solid var(--color-primary)', display: 'flex', alignItems: 'center', gap: '16px' }}>
             <CheckCircle color="var(--color-primary)" size={32} />
@@ -166,9 +167,9 @@ export const ProductAdvisor: React.FC<ProductAdvisorProps> = ({ onProductAnalyze
                 <h3 style={{ fontSize: '1.5rem', fontWeight: 800 }}>{result.product_name}</h3>
                 <div style={{ display: 'flex', gap: '4px', marginTop: '6px' }}>
                   {[1, 2, 3, 4, 5].map(star => (
-                    <Star 
-                      key={star} 
-                      size={18} 
+                    <Star
+                      key={star}
+                      size={18}
                       color={star <= result.sustainability_rating ? '#f59e0b' : 'var(--border-color)'}
                       fill={star <= result.sustainability_rating ? '#f59e0b' : 'none'}
                     />
@@ -178,7 +179,7 @@ export const ProductAdvisor: React.FC<ProductAdvisorProps> = ({ onProductAnalyze
                   </span>
                 </div>
               </div>
-              
+
               <div style={{ textAlign: 'right' }}>
                 <span className="impact-badge" style={{ backgroundColor: 'transparent', border: `1px solid ${getImpactColor(result.estimated_carbon_impact)}`, color: getImpactColor(result.estimated_carbon_impact) }}>
                   {result.estimated_carbon_impact} Carbon Impact
@@ -218,8 +219,8 @@ export const ProductAdvisor: React.FC<ProductAdvisorProps> = ({ onProductAnalyze
           </div>
 
           <div style={{ textAlign: 'center', marginTop: '16px' }}>
-            <button 
-              className="btn btn-secondary" 
+            <button
+              className="btn btn-secondary"
               onClick={() => { setFile(null); setDescription(''); setResult(null); }}
             >
               Analyze Another Product
