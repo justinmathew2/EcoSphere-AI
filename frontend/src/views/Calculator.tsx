@@ -168,8 +168,9 @@ export const Calculator: React.FC<CalculatorProps> = ({ onCalculateSuccess, save
 
             <div className="form-grid">
               <div className="form-group">
-                <label className="form-label">Gasoline Car Travel (km/week)</label>
+                <label htmlFor="transport_car_km_per_week" className="form-label">Gasoline Car Travel (km/week)</label>
                 <input
+                  id="transport_car_km_per_week"
                   type="number"
                   name="transport_car_km_per_week"
                   className="form-input"
@@ -179,8 +180,9 @@ export const Calculator: React.FC<CalculatorProps> = ({ onCalculateSuccess, save
               </div>
 
               <div className="form-group">
-                <label className="form-label">Electric Vehicle (EV) (km/week)</label>
+                <label htmlFor="transport_ev_km_per_week" className="form-label">Electric Vehicle (EV) (km/week)</label>
                 <input
+                  id="transport_ev_km_per_week"
                   type="number"
                   name="transport_ev_km_per_week"
                   className="form-input"
@@ -192,8 +194,9 @@ export const Calculator: React.FC<CalculatorProps> = ({ onCalculateSuccess, save
 
             <div className="form-grid" style={{ marginTop: '12px' }}>
               <div className="form-group">
-                <label className="form-label">Bus Travel (km/week)</label>
+                <label htmlFor="transport_bus_km_per_week" className="form-label">Bus Travel (km/week)</label>
                 <input
+                  id="transport_bus_km_per_week"
                   type="number"
                   name="transport_bus_km_per_week"
                   className="form-input"
@@ -203,8 +206,9 @@ export const Calculator: React.FC<CalculatorProps> = ({ onCalculateSuccess, save
               </div>
 
               <div className="form-group">
-                <label className="form-label">Train Travel (km/week)</label>
+                <label htmlFor="transport_train_km_per_week" className="form-label">Train Travel (km/week)</label>
                 <input
+                  id="transport_train_km_per_week"
                   type="number"
                   name="transport_train_km_per_week"
                   className="form-input"
@@ -216,8 +220,9 @@ export const Calculator: React.FC<CalculatorProps> = ({ onCalculateSuccess, save
 
             <div className="form-grid" style={{ marginTop: '12px' }}>
               <div className="form-group">
-                <label className="form-label">Bicycle/Walking (km/week)</label>
+                <label htmlFor="transport_bike_km_per_week" className="form-label">Bicycle/Walking (km/week)</label>
                 <input
+                  id="transport_bike_km_per_week"
                   type="number"
                   name="transport_bike_km_per_week"
                   className="form-input"
@@ -227,8 +232,9 @@ export const Calculator: React.FC<CalculatorProps> = ({ onCalculateSuccess, save
               </div>
 
               <div className="form-group">
-                <label className="form-label">Air Travel (Flight Hours/year)</label>
+                <label htmlFor="transport_flights_hours_per_year" className="form-label">Air Travel (Flight Hours/year)</label>
                 <input
+                  id="transport_flights_hours_per_year"
                   type="number"
                   name="transport_flights_hours_per_year"
                   className="form-input"
@@ -249,8 +255,9 @@ export const Calculator: React.FC<CalculatorProps> = ({ onCalculateSuccess, save
             </div>
 
             <div className="form-group">
-              <label className="form-label">Monthly Electricity Bill Consumption (kWh)</label>
+              <label htmlFor="energy_kwh_per_month" className="form-label">Monthly Electricity Bill Consumption (kWh)</label>
               <input
+                id="energy_kwh_per_month"
                 type="number"
                 name="energy_kwh_per_month"
                 className="form-input"
@@ -262,8 +269,9 @@ export const Calculator: React.FC<CalculatorProps> = ({ onCalculateSuccess, save
             </div>
 
             <div className="form-group">
-              <label className="form-label">Air Conditioning (AC) usage (Hours/week)</label>
+              <label htmlFor="energy_ac_hours_per_week" className="form-label">Air Conditioning (AC) usage (Hours/week)</label>
               <input
+                id="energy_ac_hours_per_week"
                 type="number"
                 name="energy_ac_hours_per_week"
                 className="form-input"
@@ -299,7 +307,11 @@ export const Calculator: React.FC<CalculatorProps> = ({ onCalculateSuccess, save
 
             <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '20px' }}>Select the dietary habit that best represents your daily food consumption:</p>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <div 
+              role="radiogroup" 
+              aria-label="Dietary habits selection" 
+              style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}
+            >
               {[
                 { id: 'vegan', label: '🌱 Vegan', desc: 'Strictly plant-based diet, no animal-derived products.' },
                 { id: 'vegetarian', label: '🥚 Vegetarian', desc: 'No meat, but consumes dairy and eggs.' },
@@ -309,6 +321,15 @@ export const Calculator: React.FC<CalculatorProps> = ({ onCalculateSuccess, save
                 <div
                   key={diet.id}
                   onClick={() => handleSelectDiet(diet.id)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      handleSelectDiet(diet.id);
+                    }
+                  }}
+                  role="radio"
+                  aria-checked={formData.food_habit === diet.id}
+                  tabIndex={0}
                   style={{
                     padding: '16px',
                     borderRadius: 'var(--border-radius-md)',
@@ -337,8 +358,9 @@ export const Calculator: React.FC<CalculatorProps> = ({ onCalculateSuccess, save
 
             <div className="form-grid">
               <div className="form-group">
-                <label className="form-label">Electronics Purchased (Items/month)</label>
+                <label htmlFor="shopping_electronics_per_month" className="form-label">Electronics Purchased (Items/month)</label>
                 <input
+                  id="shopping_electronics_per_month"
                   type="number"
                   name="shopping_electronics_per_month"
                   className="form-input"
@@ -348,8 +370,9 @@ export const Calculator: React.FC<CalculatorProps> = ({ onCalculateSuccess, save
               </div>
 
               <div className="form-group">
-                <label className="form-label">Clothing Purchased (Items/month)</label>
+                <label htmlFor="shopping_clothing_items_per_month" className="form-label">Clothing Purchased (Items/month)</label>
                 <input
+                  id="shopping_clothing_items_per_month"
                   type="number"
                   name="shopping_clothing_items_per_month"
                   className="form-input"
@@ -360,8 +383,9 @@ export const Calculator: React.FC<CalculatorProps> = ({ onCalculateSuccess, save
             </div>
 
             <div className="form-group">
-              <label className="form-label">Single-use Plastic Bags Used (Bags/week)</label>
+              <label htmlFor="shopping_plastic_bags_per_week" className="form-label">Single-use Plastic Bags Used (Bags/week)</label>
               <input
+                id="shopping_plastic_bags_per_week"
                 type="number"
                 name="shopping_plastic_bags_per_week"
                 className="form-input"
@@ -381,6 +405,7 @@ export const Calculator: React.FC<CalculatorProps> = ({ onCalculateSuccess, save
                   key={level.id}
                   type="button"
                   onClick={() => handleSelectRecycling(level.id)}
+                  aria-pressed={formData.waste_recycling_level === level.id}
                   style={{
                     flex: 1,
                     padding: '12px',

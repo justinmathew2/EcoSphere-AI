@@ -1,4 +1,6 @@
 import os
+import functools
+import json
 from fastapi import FastAPI, HTTPException, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -32,6 +34,20 @@ try:
 except Exception as e:
     ai_agent = None
     print(f"Warning: Failed to initialize AIAgent. AI features will be disabled. Error: {e}")
+
+@functools.lru_cache(maxsize=128)
+def get_cached_action_plan(profile_json: str) -> str:
+    """
+    Helper function to cache Vertex AI action-plan calls.
+    Returns serialized ActionPlan JSON.
+    """
+    if not ai_agent:
+        raise ValueError("AIAgent is not initialized")
+    profile_dict = json.loads(profile_json)
+    profile = CarbonProfileInput(**profile_dict)
+    profile_summary = get_profile_summary(profile)
+    plan = ai_agent.generate_action_plan(profile_summary)
+    return plan.model_dump_json()
 
 # Helper to construct user profile summary text for the AI prompt
 def get_profile_summary(profile: Optional[CarbonProfileInput]) -> str:
@@ -84,7 +100,7 @@ def calculate_emissions(profile: CarbonProfileInput):
     """
     try:
         return calculate_footprint(profile)
-    except Exception as e:
+    except ValueError as e:
         raise HTTPException(status_code=400, detail=f"Calculation error: {e}")
 
 @app.post("/api/coach")
@@ -114,8 +130,10 @@ def get_weekly_action_plan(profile: CarbonProfileInput):
         raise HTTPException(status_code=503, detail="Gemini AI Agent is not initialized.")
     
     try:
-        profile_summary = get_profile_summary(profile)
-        return ai_agent.generate_action_plan(profile_summary)
+        # Create a stable string representation for the cache key
+        profile_json = json.dumps(profile.model_dump(), sort_keys=True)
+        cached_plan_json = get_cached_action_plan(profile_json)
+        return ActionPlan.model_validate_json(cached_plan_json)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Action Plan error: {e}")
 

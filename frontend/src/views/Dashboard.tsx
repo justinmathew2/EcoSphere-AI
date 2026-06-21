@@ -75,6 +75,18 @@ export const Dashboard: React.FC<DashboardProps> = ({
         </div>
       </div>
 
+      <div className="glass-panel mb-32" style={{ padding: '20px', borderLeft: '4px solid var(--color-primary)' }}>
+        <h3 style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+          <Leaf size={20} color="var(--color-primary)" />
+          Our Mission & Problem Statement
+        </h3>
+        <p style={{ color: 'var(--text-secondary)', lineHeight: '1.6' }}>
+          <strong>EcoSphere AI</strong> is an AI-powered Carbon Footprint Awareness Platform using Google Gemini. 
+          Our goal is to help users <strong>track, understand, and reduce</strong> their environmental impact 
+          through personalized sustainability insights.
+        </p>
+      </div>
+
       <div className="metrics-grid">
         {/* Carbon Score Card */}
         <div className="glass-panel score-panel">

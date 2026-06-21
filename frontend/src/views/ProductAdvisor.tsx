@@ -85,8 +85,9 @@ export const ProductAdvisor: React.FC<ProductAdvisorProps> = ({ onProductAnalyze
         <form onSubmit={handleSubmit} className="glass-panel" style={{ padding: '32px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
 
           <div className="form-group">
-            <label className="form-label">Product Name / Description</label>
+            <label htmlFor="product-description" className="form-label">Product Name / Description</label>
             <textarea
+              id="product-description"
               className="form-textarea"
               rows={3}
               placeholder="e.g. Disposable plastic water bottles, cotton organic t-shirt, plastic toothbrush..."
@@ -96,10 +97,19 @@ export const ProductAdvisor: React.FC<ProductAdvisorProps> = ({ onProductAnalyze
           </div>
 
           <div className="form-group">
-            <label className="form-label">Upload Product Photo or Ingredient Label (Optional)</label>
+            <label htmlFor="product-file-input" className="form-label">Upload Product Photo or Ingredient Label (Optional)</label>
             <div
               className="file-upload-zone"
               onClick={() => document.getElementById('product-file-input')?.click()}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  document.getElementById('product-file-input')?.click();
+                }
+              }}
+              role="button"
+              tabIndex={0}
+              aria-label="Upload label or box image"
               style={{ padding: '24px' }}
             >
               <input

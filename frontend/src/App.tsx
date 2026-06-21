@@ -40,6 +40,34 @@ interface CarbonCalculationResult {
   category: string;
   breakdown: CarbonBreakdown;
   financial_savings_estimate_usd: number;
+interface CarbonProfileInput {
+  transport_car_km_per_week: number;
+  transport_ev_km_per_week: number;
+  transport_bus_km_per_week: number;
+  transport_train_km_per_week: number;
+  transport_bike_km_per_week: number;
+  transport_flights_hours_per_year: number;
+  energy_kwh_per_month: number;
+  energy_ac_hours_per_week: number;
+  energy_has_solar: boolean;
+  food_habit: string;
+  shopping_electronics_per_month: number;
+  shopping_clothing_items_per_month: number;
+  shopping_plastic_bags_per_week: number;
+  waste_recycling_level: string;
+}
+
+interface CarbonRecommendation {
+  category: string;
+  description: string;
+  estimated_co2_savings_kg: number;
+  estimated_cost_savings_usd: number;
+}
+
+interface ActionPlanData {
+  title: string;
+  score_impact: number;
+  recommendations: CarbonRecommendation[];
 }
 
 function App() {
@@ -49,10 +77,10 @@ function App() {
   
   // Carbon Footprint Profile & Calculations States
   const [calcResult, setCalcResult] = useState<CarbonCalculationResult | null>(null);
-  const [profileData, setProfileData] = useState<any>(null);
+  const [profileData, setProfileData] = useState<CarbonProfileInput | null>(null);
   
   // Weekly action plan states (cached here so checking off items is persistent)
-  const [actionPlan, setActionPlan] = useState<any>(null);
+  const [actionPlan, setActionPlan] = useState<ActionPlanData | null>(null);
   const [checkedTasks, setCheckedTasks] = useState<boolean[]>([]);
 
   // Gamification states
@@ -156,10 +184,10 @@ function App() {
           <span style={{ fontWeight: 800, fontSize: '1.1rem' }}>EcoSphere AI</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <button className="hamburger-btn" onClick={toggleTheme}>
+          <button className="hamburger-btn" onClick={toggleTheme} aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}>
             {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
           </button>
-          <button className="hamburger-btn" onClick={() => setSidebarOpen(!sidebarOpen)}>
+          <button className="hamburger-btn" onClick={() => setSidebarOpen(!sidebarOpen)} aria-label="Toggle navigation menu" aria-expanded={sidebarOpen}>
             {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
@@ -199,6 +227,7 @@ function App() {
             onClick={toggleTheme} 
             className="btn btn-secondary"
             style={{ padding: '8px', borderRadius: '50%', border: 'none', background: 'rgba(255,255,255,0.03)' }}
+            aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
           >
             {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
           </button>

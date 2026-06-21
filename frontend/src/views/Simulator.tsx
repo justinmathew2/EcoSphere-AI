@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { 
   BarChart, 
   Bar, 
@@ -116,13 +116,13 @@ export const Simulator: React.FC<SimulatorProps> = ({ currentProfile }) => {
   const simulatedResult = computeEmissions(simProfile);
 
   // Recharts structured comparison
-  const chartData = [
+  const chartData = useMemo(() => [
     { name: 'Transport', Current: Math.round(currentResult.transport), Simulated: Math.round(simulatedResult.transport) },
     { name: 'Energy', Current: Math.round(currentResult.energy), Simulated: Math.round(simulatedResult.energy) },
     { name: 'Food', Current: Math.round(currentResult.food), Simulated: Math.round(simulatedResult.food) },
     { name: 'Shopping', Current: Math.round(currentResult.shopping), Simulated: Math.round(simulatedResult.shopping) },
     { name: 'Waste', Current: Math.round(currentResult.waste), Simulated: Math.round(simulatedResult.waste) },
-  ];
+  ], [currentResult, simulatedResult]);
 
   const handleSliderChange = (name: keyof CarbonProfile, value: any) => {
     setSimProfile(prev => ({
@@ -168,11 +168,12 @@ export const Simulator: React.FC<SimulatorProps> = ({ currentProfile }) => {
             <h4 style={{ fontSize: '0.95rem', fontWeight: 700, marginBottom: '12px' }}>🚗 Commute Adjustments</h4>
             
             <div className="form-group">
-              <label className="form-label" style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <label htmlFor="sim-car-distance" className="form-label" style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <span>Car Distance (Gasoline)</span>
                 <span style={{ fontWeight: 600 }}>{simProfile.transport_car_km_per_week} km/week</span>
               </label>
               <input 
+                id="sim-car-distance"
                 type="range" min="0" max="500" step="10"
                 value={simProfile.transport_car_km_per_week}
                 onChange={(e) => handleSliderChange('transport_car_km_per_week', parseInt(e.target.value))}
@@ -181,11 +182,12 @@ export const Simulator: React.FC<SimulatorProps> = ({ currentProfile }) => {
             </div>
 
             <div className="form-group" style={{ marginTop: '8px' }}>
-              <label className="form-label" style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <label htmlFor="sim-ev-distance" className="form-label" style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <span>Switch travel to EV</span>
                 <span style={{ fontWeight: 600 }}>{simProfile.transport_ev_km_per_week} km/week</span>
               </label>
               <input 
+                id="sim-ev-distance"
                 type="range" min="0" max="500" step="10"
                 value={simProfile.transport_ev_km_per_week}
                 onChange={(e) => handleSliderChange('transport_ev_km_per_week', parseInt(e.target.value))}
@@ -201,21 +203,23 @@ export const Simulator: React.FC<SimulatorProps> = ({ currentProfile }) => {
             <div className="form-group" style={{ flexDirection: 'row', alignItems: 'center', gap: '12px', background: 'rgba(255,255,255,0.02)', padding: '10px', borderRadius: 'var(--border-radius-sm)', border: '1px solid var(--border-color)', cursor: 'pointer' }}
                  onClick={() => handleSliderChange('energy_has_solar', !simProfile.energy_has_solar)}>
               <input 
+                id="sim-has-solar"
                 type="checkbox" checked={simProfile.energy_has_solar} readOnly
                 style={{ width: '18px', height: '18px', cursor: 'pointer' }}
               />
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <label htmlFor="sim-has-solar" style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer' }}>
                 <Sun size={14} color="var(--color-warning)" />
                 <span style={{ fontWeight: 600, fontSize: '0.85rem' }}>Install Solar Panels</span>
-              </div>
+              </label>
             </div>
 
             <div className="form-group" style={{ marginTop: '12px' }}>
-              <label className="form-label" style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <label htmlFor="sim-ac-hours" className="form-label" style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <span>Air Conditioner hours</span>
                 <span style={{ fontWeight: 600 }}>{simProfile.energy_ac_hours_per_week} hours/week</span>
               </label>
               <input 
+                id="sim-ac-hours"
                 type="range" min="0" max="60" step="1"
                 value={simProfile.energy_ac_hours_per_week}
                 onChange={(e) => handleSliderChange('energy_ac_hours_per_week', parseInt(e.target.value))}
@@ -233,6 +237,7 @@ export const Simulator: React.FC<SimulatorProps> = ({ currentProfile }) => {
                   key={diet}
                   type="button"
                   onClick={() => handleSliderChange('food_habit', diet)}
+                  aria-pressed={simProfile.food_habit === diet}
                   style={{
                     flex: '1 1 40%',
                     padding: '8px 10px',

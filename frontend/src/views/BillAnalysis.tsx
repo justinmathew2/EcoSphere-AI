@@ -73,6 +73,15 @@ export const BillAnalysis: React.FC<BillAnalysisProps> = ({ onBillAnalyzed }) =>
           <div
             className="file-upload-zone"
             onClick={() => document.getElementById('bill-file-input')?.click()}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                document.getElementById('bill-file-input')?.click();
+              }
+            }}
+            role="button"
+            tabIndex={0}
+            aria-label="Upload electricity bill image or PDF"
           >
             <input
               type="file"
